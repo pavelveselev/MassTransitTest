@@ -12,18 +12,19 @@ builder.Services
 
         x.UsingRabbitMq((context, cfg) =>
         {
+            EndpointConvention.Map<TestBatchMessage>(new Uri($"queue:test_batch_queue"));
             EndpointConvention.Map<TestMessage>(new Uri($"queue:test_queue"));
 
             cfg.Host(new Uri($"rabbitmq://{host}/"), h =>
             {
-                h.RequestedConnectionTimeout(TimeSpan.FromHours(12));
+                h.RequestedConnectionTimeout(TimeSpan.FromMinutes(1));
                 //h.Username(userName);
                 //h.Password(password);
             });
         });
 
-        //x.AddRequestClient<TestMessage>(
-        //    new Uri($"rabbitmq://{host}/scr_crt_by_period"), TimeSpan.FromHours(1));
+        x.AddRequestClient<TestClientMessage>(
+            new Uri($"rabbitmq://{host}/test_client_queue"), TimeSpan.FromMinutes(1));
     });
 
 builder.Services.AddControllers();

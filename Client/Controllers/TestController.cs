@@ -9,12 +9,11 @@ namespace Client.Controllers;
 public class TestController : ControllerBase
 {
     private static int Count = 0;
+    private readonly ISendEndpointProvider _sendEndpointProvider;
 
-    private readonly IBus _bus;
-
-    public TestController(IBus bus)
+    public TestController(ISendEndpointProvider sendEndpointProvider)
     {
-        _bus = bus;
+        _sendEndpointProvider = sendEndpointProvider;
     }
 
     [HttpGet]
@@ -25,6 +24,7 @@ public class TestController : ControllerBase
             Id = Count++,
             TimeStamp = DateTime.Now,
         };
-        await _bus.Send<TestMessage>(message);
+
+        await _sendEndpointProvider.Send<TestMessage>(message);
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Common.Messages;
 
-public record TestMessage
+public record TestBatchMessage
 {
     public int Id { get; init; }
 
