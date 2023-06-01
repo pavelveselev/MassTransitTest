@@ -7,12 +7,21 @@ IHost host = Host.CreateDefaultBuilder(args)
     {
         services.AddMassTransit(x =>
             {
+                var host = "localhost";
+
                 x.AddConsumer<TestClientConsumer>();
                 x.AddConsumer<TestBatchConsumer>();
                 x.AddConsumer<TestConsumer>();
 
                 x.UsingRabbitMq((context, cfg) =>
                 {
+                    cfg.Host(new Uri($"rabbitmq://{host}/"), h =>
+                    {
+                        h.RequestedConnectionTimeout(TimeSpan.FromMinutes(1));
+                        //h.Username(userName);
+                        //h.Password(password);
+                    });
+
                     var messageLimit = 5;
                     cfg.ReceiveEndpoint("test_batch_queue", e =>
                     {

@@ -24,7 +24,7 @@ builder.Services
         });
 
         x.AddRequestClient<TestClientMessage>(
-            new Uri($"rabbitmq://{host}/test_client_queue"), TimeSpan.FromMinutes(1));
+            new Uri($"queue:test_client_queue"), TimeSpan.FromMinutes(1));
     });
 
 builder.Services.AddControllers();
